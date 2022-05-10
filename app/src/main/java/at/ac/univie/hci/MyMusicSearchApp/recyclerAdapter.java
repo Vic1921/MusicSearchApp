@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ import java.util.ArrayList;
 public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyViewHolder> {
     private ArrayList<Album> albumsList;
 
-    public recyclerAdapter(ArrayList<Album> albumsList) {
-        this.albumsList = albumsList;
+    public recyclerAdapter(ArrayList<Album> alb) {
+        this.albumsList = alb;
     }
     public class MyViewHolder extends RecyclerView.ViewHolder{
         private TextView albumTitle;
@@ -33,6 +34,14 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
             imageAlbum = view.findViewById(R.id.band_image_view);
         }
 
+    }
+
+    public void setAlbum(Album album) {
+        if(album == null)
+            return;
+        int index = this.albumsList.indexOf(album);
+        this.albumsList.set(index, album);
+        notifyItemChanged(index);
     }
 
     @NonNull
@@ -52,9 +61,13 @@ public class recyclerAdapter extends RecyclerView.Adapter<recyclerAdapter.MyView
 
         holder.albumTitle.setText(title);
         holder.albumType.setText(type);
-        holder.releaseDate.setText(releaseYear);
-        // Picasso for Image displaying
-        Picasso.get().load(albumUrl).into(holder.imageAlbum);
+         holder.releaseDate.setText(releaseYear);
+        if (albumUrl != null) {
+            String albumWithHttps = "https" + albumUrl.substring(4);
+            // Picasso for Image displaying
+            //Picasso.get().load(albumUrl/*"https://"+ albumUrl.substring(7)*/).into(holder.imageAlbum);
+            Glide.with(holder.itemView.getContext()).load(albumWithHttps).into(holder.imageAlbum);
+        }
     }
 
     @Override

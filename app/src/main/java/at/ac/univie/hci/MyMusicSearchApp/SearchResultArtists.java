@@ -58,7 +58,6 @@ public class SearchResultArtists extends AppCompatActivity {
         requestQueue = new RequestQueue(cache, network);
         requestQueue.start();
 
-
         String selectedArtist = getIntent().getStringExtra("search_result");
         String URL = "https://musicbrainz.org/ws/2/artist/?query=" + selectedArtist + "&fmt=json";
         // GET the ID Request
@@ -72,14 +71,13 @@ public class SearchResultArtists extends AppCompatActivity {
                             JSONArray artists = response.getJSONArray("artists");
                             artistId[0] = artists.getJSONObject(0).getString("id");
                             artistName[0] = artists.getJSONObject(0).getString("name");
-                            //artistId[0] = ((JSONObject)((JSONArray)response.get("artists")).get(0)).get("id").toString();
-                            //artistName[0] =  ((JSONObject)((JSONArray)response.get("artists")).get(0)).get("name").toString();
-                            executeGetAlbums();
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        // Execute request here?
+                        artistNameTextView = findViewById(R.id.band_name_text_view);
+                        artistNameTextView.setText(artistName[0]);
+                        executeGetAlbums();
+                        setAdapter();
                     }
                 },
                 new Response.ErrorListener() {
@@ -99,13 +97,8 @@ public class SearchResultArtists extends AppCompatActivity {
             }
         };
         requestQueue.add(artistIdRequest);
-        //getCoverArtRequest(albumArrayList);
 
-
-        artistNameTextView = findViewById(R.id.band_name_text_view);
-        artistNameTextView.setText(artistId[0]);
         recyclerView = findViewById(R.id.albums_meta_view);
-        setAdapter();
     }
 
     public void getCoverArtRequest(ArrayList<Album> albums) {
@@ -123,6 +116,8 @@ public class SearchResultArtists extends AppCompatActivity {
                             try {
                                 JSONArray images = response.getJSONArray("images");
                                 album.setAlbumUrl(images.getJSONObject(0).getString("image"));
+                                if(recyclerView.getAdapter() != null)
+                                ((recyclerAdapter)recyclerView.getAdapter()).setAlbum(album);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -134,7 +129,7 @@ public class SearchResultArtists extends AppCompatActivity {
                             Toast.makeText(SearchResultArtists.this,
                                     "Please try again!",
                                     Toast.LENGTH_LONG).show();
-                            Log.e("API_ERROR", error.getMessage());
+                            Log.e("API_ERROR", "error.getMessage()");
                         }
                     }) {
                 @Override
@@ -159,7 +154,6 @@ public class SearchResultArtists extends AppCompatActivity {
                         Log.i("API_RESPONSE", response.toString());
                         processAlbumResponse(response);
                         getCoverArtRequest(albumArrayList);
-                        setAdapter();
                     }
                 },
                 new Response.ErrorListener() {
