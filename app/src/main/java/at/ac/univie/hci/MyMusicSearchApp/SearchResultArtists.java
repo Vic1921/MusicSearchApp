@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -205,6 +206,8 @@ public class SearchResultArtists extends AppCompatActivity {
 
     Favorites favorites = Favorites.getInstance();
     public void addFavorites(View view) {
+        //view = findViewById(R.id.button_add);
+        ((Button)view).setEnabled(false);
         Toast.makeText(this, "Added to Favorites!", Toast.LENGTH_LONG).show();
         favorites.artist.add(artistName[0]);
     }
