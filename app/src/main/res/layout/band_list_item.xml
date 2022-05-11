@@ -18,6 +18,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:fontFamily="sans-serif-black"
+        android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@id/band_image_view"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Album Title" />
@@ -37,6 +39,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@id/title_text_view"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="19895" />
